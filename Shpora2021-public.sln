@@ -17,6 +17,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "day1", "day1", "{AD01E7F9-E
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Recap", "Recap\Recap.csproj", "{AE652AA6-4F48-4AC2-A34A-93308D3623DB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DrawBitmapByThreads", "DrawBitmapByThreads\DrawBitmapByThreads.csproj", "{B55F65E0-DD02-47B3-AED7-26EF50D2A625}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -47,6 +49,10 @@ Global
 		{AE652AA6-4F48-4AC2-A34A-93308D3623DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AE652AA6-4F48-4AC2-A34A-93308D3623DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AE652AA6-4F48-4AC2-A34A-93308D3623DB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B55F65E0-DD02-47B3-AED7-26EF50D2A625}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B55F65E0-DD02-47B3-AED7-26EF50D2A625}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B55F65E0-DD02-47B3-AED7-26EF50D2A625}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B55F65E0-DD02-47B3-AED7-26EF50D2A625}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -58,6 +64,7 @@ Global
 		{015D9144-CBF2-4501-B4DE-5DEFBE7A7CE4} = {AD01E7F9-EB27-4F6E-A30B-748680CD7B8D}
 		{C54A93E3-ADDA-45B7-B4A4-2ACD7008DC2E} = {AD01E7F9-EB27-4F6E-A30B-748680CD7B8D}
 		{AE652AA6-4F48-4AC2-A34A-93308D3623DB} = {AD01E7F9-EB27-4F6E-A30B-748680CD7B8D}
+		{B55F65E0-DD02-47B3-AED7-26EF50D2A625} = {AD01E7F9-EB27-4F6E-A30B-748680CD7B8D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A68F331E-DF3F-4F8B-88F7-D49C00244C39}
