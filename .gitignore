@@ -5,3 +5,4 @@ packages/*
 *.user
 */logs/*
 .vs/*
+.idea/
