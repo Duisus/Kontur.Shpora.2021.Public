@@ -7,6 +7,7 @@ using System.Net;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using System.Threading.Tasks;
+using NMAP;
 
 namespace HackChat
 {
@@ -16,7 +17,9 @@ namespace HackChat
 
 		private readonly byte[] PingMsg = new byte[1];
 		private readonly ConcurrentDictionary<IPEndPoint, (TcpClient Client, NetworkStream Stream)> Connections = new();
+		private readonly SequentialScannerOpen scanner = new();
 
+		private IPAddress[] ips;
 		private readonly int port;
 		private readonly TcpListener tcpListener;
 
@@ -24,6 +27,12 @@ namespace HackChat
 
 		public void Start()
 		{
+			ips = new IPAddress[256];
+			for (int i = 0; i < 255; i++)
+			{
+				ips[i] = new IPAddress(new byte[] {192, 168, 11, (byte)i});
+			}
+			
 			Task.Run(DiscoverLoop);
 			Task.Run(() =>
 			{
@@ -58,7 +67,9 @@ namespace HackChat
 
 		private async Task Discover()
 		{
-			throw new NotImplementedException();
+			var clients = await scanner.Scan(ips, port);
+
+			//await Task.WhenAll(clients.Where( c => c))
 		}
 
 		private static async Task ProcessClientAsync(TcpClient tcpClient)

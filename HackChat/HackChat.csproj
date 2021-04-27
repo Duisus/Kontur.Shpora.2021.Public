@@ -9,4 +9,8 @@
     <Compile Remove="Chat.Public.cs" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\NMAP\NMAP.csproj" />
+  </ItemGroup>
+
 </Project>
