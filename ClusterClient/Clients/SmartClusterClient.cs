@@ -9,6 +9,7 @@ namespace ClusterClient.Clients
 {
     public class SmartClusterClient : ClusterClientBase
     {
+        //todo use EventWaitHandle?
         public SmartClusterClient(string[] replicaAddresses) : base(replicaAddresses)
         {
         }
