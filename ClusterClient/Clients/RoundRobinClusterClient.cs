@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Net.NetworkInformation;
-using System.Text;
 using System.Threading.Tasks;
 using ClusterClient.AdditionalClasses;
 using log4net;
@@ -27,8 +25,10 @@ namespace ClusterClient.Clients
             for (int i = 0; i < requests.Length; i++)
             {
                 completedRequest = await SendRequestAsync(requests[i], oneRequestTimeout);
+                
                 if (completedRequest.Status == RequestStatus.Success)
                     return completedRequest.ReceivedData;
+                
                 if (completedRequest.Status == RequestStatus.BadResponse)
                 {
                     remainingTimeout -= completedRequest.Duration;

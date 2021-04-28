@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Text;
 using System.Threading.Tasks;
 using ClusterClient.AdditionalClasses;
 using log4net;
@@ -11,7 +10,6 @@ namespace ClusterClient.Clients
 {
     public class SmartClusterClient : RoundRobinClusterClient
     {
-        //todo use EventWaitHandle?
         public SmartClusterClient(string[] replicaAddresses) : base(replicaAddresses)
         {
         }
@@ -47,19 +45,12 @@ namespace ClusterClient.Clients
                     && completedRequest.Uri == requests[i].RequestUri)
                 {
                     remainingTimeout -= completedRequest.Duration;
-                    oneRequestTimeout = timeout / (requests.Length - i - 1);
+                    oneRequestTimeout = remainingTimeout / (requests.Length - i - 1);
                 }
             }
 
             ThrowTimeoutExceptionIfItExceed(completedRequest);
             throw new WebException("Bad response");
-        }
-
-        protected async Task<RequestResult> SmartSendRequestAsync(
-            WebRequest request, TimeSpan timeout)
-        {
-            var a = await SendRequestAsync(request, timeout);
-            throw new NotImplementedException();
         }
 
         protected override ILog Log => LogManager.GetLogger(typeof(SmartClusterClient));
