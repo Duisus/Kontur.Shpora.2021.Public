@@ -17,7 +17,7 @@ namespace ClusterClient.Clients
 
         public override async Task<string> ProcessRequestAsync(string query, TimeSpan timeout)
         {
-            var requests = await CreateRequestsAsync(ReplicaAddresses, query);
+            var requests = CreateRequests(ReplicaAddresses, query);
 
             var result = await TryGetFirstSuccessRequestAsync(  // todo refactor
                 requests
@@ -27,13 +27,13 @@ namespace ClusterClient.Clients
             if (result == null)
                 throw new WebException("Bad response");
 
-            return result.Result;
+            return result.ReceivedData;
         }
 
-        protected async Task<RequestResult<string>> TryGetFirstSuccessRequestAsync(
-            List<Task<RequestResult<string>>> tasks)
+        protected async Task<RequestResult> TryGetFirstSuccessRequestAsync(
+            List<Task<RequestResult>> tasks)
         {
-            Task<RequestResult<string>> completedTask;
+            Task<RequestResult> completedTask;
             do
             {
                 completedTask = await Task.WhenAny(tasks);

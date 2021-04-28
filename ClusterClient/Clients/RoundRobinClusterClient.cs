@@ -18,37 +18,41 @@ namespace ClusterClient.Clients
 
         public override async Task<string> ProcessRequestAsync(string query, TimeSpan timeout)
         {
-            var requests = (await CreateRequestsAsync(
-                GetRandomAddressesSequence(), query)).ToArray();
+            var requests = CreateRequests(
+                GetRandomAddressesSequence(), query).ToArray();
             var oneRequestTimeout = CalculateOneTimeout(timeout, requests.Length);
+            var remainingTimeout = timeout;
 
-            RequestResult<string> result = null;
+            RequestResult completedRequest = null;
             for (int i = 0; i < requests.Length; i++)
             {
-                result = await SendRequestAsync(requests[i], oneRequestTimeout);
-                if (result.Status == RequestStatus.Success)
-                    return result.Result;
-                if (result.Status == RequestStatus.BadResponse)
+                completedRequest = await SendRequestAsync(requests[i], oneRequestTimeout);
+                if (completedRequest.Status == RequestStatus.Success)
+                    return completedRequest.ReceivedData;
+                if (completedRequest.Status == RequestStatus.BadResponse)
                 {
-                    timeout -= result.Duration;
-                    oneRequestTimeout = timeout / (requests.Length - i - 1);
+                    remainingTimeout -= completedRequest.Duration;
+                    oneRequestTimeout = remainingTimeout / (requests.Length - i - 1);
                 }
             }
-            
-            ThrowTimeoutExceptionIfItExceed(result);
+
+            ThrowTimeoutExceptionIfItExceed(completedRequest);
             throw new WebException("Bad response");
         }
 
-        protected string[] GetRandomAddressesSequence()
+        protected IEnumerable<string> GetRandomAddressesSequence()
         {
-            return ReplicaAddresses; // TODO REALIZE!!!
+            return ReplicaAddresses; // TODO delete
+            
+            var random = new Random();
+            return ReplicaAddresses.OrderBy(x => random.Next()); 
         }
 
         protected TimeSpan CalculateOneTimeout(
             TimeSpan totalTimeout, int addressesCount, TimeSpan? lastDuration = null)
         {
             lastDuration ??= TimeSpan.Zero;
-            var remainingTimeout = totalTimeout - (TimeSpan)lastDuration;
+            var remainingTimeout = totalTimeout - (TimeSpan) lastDuration;
             return remainingTimeout / addressesCount;
         }
 

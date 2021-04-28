@@ -2,23 +2,30 @@ using System;
 
 namespace ClusterClient.AdditionalClasses
 {
-    public class RequestResult<T>  // TODO delete generic? It is like transport level, generic = byte or string
+    public class RequestResult
     {
-        public T Result { get; }
+        public Uri Uri { get; }
+        public string ReceivedData { get; }
         public TimeSpan Duration { get; }
         public RequestStatus Status { get; }
 
-        public RequestResult(T result, TimeSpan duration)
+        private RequestResult(
+            string receivedData, TimeSpan duration, RequestStatus status, Uri uri)
         {
-            Result = result;
+            ReceivedData = receivedData;
             Duration = duration;
-            Status = RequestStatus.Success;
-        }
-        
-        public RequestResult(RequestStatus status, TimeSpan duration)
-        {
             Status = status;
-            Duration = duration;
+            Uri = uri;
+        }
+
+        public RequestResult(string receivedData, TimeSpan duration, Uri uri)
+            : this(receivedData, duration, RequestStatus.Success, uri)
+        {
+        }
+
+        public RequestResult(RequestStatus status, TimeSpan duration, Uri uri) 
+            : this(default, duration, status, uri)
+        {
         }
     }
 }

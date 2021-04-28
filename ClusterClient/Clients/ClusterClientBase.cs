@@ -45,14 +45,14 @@ namespace ClusterClient.Clients
             }
         }
         
-        protected async Task<IEnumerable<HttpWebRequest>> CreateRequestsAsync(
+        protected IEnumerable<HttpWebRequest> CreateRequests(
             IEnumerable<string> addresses, string query)
         {
-            return await Task.Run(() => addresses.Select(uri =>
-                CreateRequest(GetUriWithQuery(uri, query))));
+            return addresses.Select(uri =>
+                CreateRequest(GetUriWithQuery(uri, query)));
         }
         
-        protected async Task<RequestResult<string>> SendRequestAsync(WebRequest request, TimeSpan timeout)
+        protected async Task<RequestResult> SendRequestAsync(WebRequest request, TimeSpan timeout)
         {
             var timer = Stopwatch.StartNew();
             var requestTask = ProcessRequestAsync(request);
@@ -62,14 +62,14 @@ namespace ClusterClient.Clients
             timer.Stop();
 
             if (timeoutTask.IsCompleted)
-                return new RequestResult<string>(RequestStatus.TimeoutExceed, timeout);
+                return new RequestResult(RequestStatus.TimeoutExceed, timeout, request.RequestUri);
 
             return requestTask.IsFaulted
-                ? new RequestResult<string>(RequestStatus.BadResponse, timer.Elapsed)
-                : new RequestResult<string>(requestTask.Result, timer.Elapsed);
+                ? new RequestResult(RequestStatus.BadResponse, timer.Elapsed, request.RequestUri)
+                : new RequestResult(requestTask.Result, timer.Elapsed, request.RequestUri);
         }
 
-        protected void ThrowTimeoutExceptionIfItExceed(RequestResult<string> requestResult)
+        protected void ThrowTimeoutExceptionIfItExceed(RequestResult requestResult)
         {
             if (requestResult.Status == RequestStatus.TimeoutExceed)
                 throw new TimeoutException(
